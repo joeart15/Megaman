@@ -2,6 +2,7 @@ const megaman = document.getElementById('megaman');
 const gameContainer = document.getElementById('game-container');
 const startButton = document.getElementById('start-button');
 const scoreDisplay = document.getElementById('score');
+const startButton1 = document.getElementById('start-button1'); // Get start-button1
 
 let isJumping = false;
 let score = 0;
@@ -19,9 +20,9 @@ const characters = [
     'resized_character_19.png'
 ];
 
-// Start the game
 startButton.addEventListener('click', () => {
-    startButton.style.display = 'none';
+    startButton.style.display = 'none'; // Hide the main start button
+    startButton1.style.display = 'none'; // Hide start-button1
     megaman.style.display = 'block'; // Show Mega Man
     megaman.style.animation = 'run 1s steps(10) infinite'; // Start running animation
     startObstacleMovement();
