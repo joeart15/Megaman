@@ -3,6 +3,8 @@ const gameContainer = document.getElementById('game-container');
 const startButton = document.getElementById('start-button');
 const scoreDisplay = document.getElementById('score');
 const startButton1 = document.getElementById('start-button1'); // Get start-button1
+const jumpButton = document.getElementById('jump-button');
+const shootButton = document.getElementById('shoot-button');
 
 let isJumping = false;
 let score = 0;
@@ -19,6 +21,9 @@ const characters = [
     'resized_character_17.png',
     'resized_character_19.png'
 ];
+
+jumpButton.addEventListener('touchstart', () => jump());
+shootButton.addEventListener('touchstart', () => shoot());
 
 startButton.addEventListener('click', () => {
     startButton.style.display = 'none'; // Hide the main start button

@@ -106,3 +106,28 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+#controls {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Spacing between buttons */
+    z-index: 10; /* Ensure buttons are above other elements */
+}
+
+#controls button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#controls button:active {
+    background-color: #45a049; /* Slightly darker when pressed */
+}
+
