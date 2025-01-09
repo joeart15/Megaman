@@ -125,9 +125,9 @@ body {
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    touch-action: manipulation; /* Prevents double-tap zoom */
 }
 
 #controls button:active {
     background-color: #45a049; /* Slightly darker when pressed */
 }
-

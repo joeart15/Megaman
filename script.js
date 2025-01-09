@@ -25,6 +25,17 @@ const characters = [
 jumpButton.addEventListener('touchstart', () => jump());
 shootButton.addEventListener('touchstart', () => shoot());
 
+jumpButton.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevents default touch behavior
+    jump();
+});
+
+shootButton.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevents default touch behavior
+    shoot();
+});
+
+
 startButton.addEventListener('click', () => {
     startButton.style.display = 'none'; // Hide the main start button
     startButton1.style.display = 'none'; // Hide start-button1
