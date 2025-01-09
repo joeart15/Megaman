@@ -48,13 +48,15 @@ body {
 
 #megaman {
     position: absolute;
-    bottom: 20px;
+    bottom: 20px; /* Keeps it close to the ground */
+    left: 20px; /* Positions it on the left side */
     width: 105px; /* Width of one frame */
     height: 100px; /* Height of one frame */
     display: none; /* Hidden until the game starts */
     background: url('megaman-sprite-single-row-resized.png') no-repeat;
     animation: run 1s steps(10) infinite; /* Animate through 10 frames */
 }
+
 
 @keyframes run {
     from {
@@ -97,8 +99,9 @@ body {
 .projectile {
     position: absolute;
     width: 15px;
-    height: 10px;
+    height: 8px;
     background-color: red;
+    border-radius: 25%;
 }
 
 .obstacle {
