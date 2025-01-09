@@ -131,3 +131,15 @@ body {
 #controls button:active {
     background-color: #45a049; /* Slightly darker when pressed */
 }
+
+@media screen and (max-width: 768px) {
+    #start-button, #start-button1 {
+        position: relative; /* Reset absolute positioning */
+        margin: 10px auto; /* Center the buttons */
+        display: block; /* Ensure they stack vertically */
+    }
+
+    #start-button1 {
+        margin-top: 10px; /* Add some space between the two buttons */
+    }
+}
