@@ -1,0 +1,98 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #87ceeb, #4a90e2);
+}
+
+#megaman {
+    position: absolute;
+    bottom: 20px;
+    width: 105px; /* Width of one frame */
+    height: 100px; /* Height of one frame */
+    display: none; /* Hidden until the game starts */
+    background: url('megaman-sprite-single-row-resized.png') no-repeat;
+    animation: run 1s steps(10) infinite; /* Animate through 10 frames */
+}
+
+@keyframes run {
+    from {
+        background-position: 0;
+    }
+    to {
+        background-position: -1052px; /* Total width of all frames */
+    }
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: url('qsPzzO6 (1).jpg') no-repeat center center;
+    background-size: cover; /* Ensures the background covers the entire container */
+}
+
+.shooting {
+    background: url('megaman-shooting-transparent-resized.png') no-repeat;
+    animation: none; /* Disable running animation when shooting */
+}
+
+#start-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    background-color: #909a36;
+    color: white;
+    border-radius: 5px;
+}
+
+#start-button1 {
+    position: absolute;
+    top: calc(50% + 60px); /* Places it below start-button (adjust 60px as needed) */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 18px;
+    text-align: center;
+    border: none;
+    background-color: #909a36;
+    color: white;
+    border-radius: 5px;
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.projectile {
+    position: absolute;
+    width: 10px;
+    height: 5px;
+    background-color: yellow;
+}
+
+.obstacle {
+    position: absolute;
+    width: 90px;
+    height: 105px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
