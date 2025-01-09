@@ -11,7 +11,31 @@ body {
     height: 100vh;
     overflow: hidden;
     background: linear-gradient(to bottom, #87ceeb, #4a90e2);
+    background: url('qsPzzO6 (1).jpg') no-repeat center center;
+    background-size: cover; /* Ensures the background covers the entire container */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center elements vertically */
+    align-items: center; /* Center elements horizontally */
 }
+
+#start-button,
+#start-button1 {
+    margin: 10px 0; /* Add spacing between buttons */
+    width: 80%; /* Make buttons responsive */
+    max-width: 300px; /* Optional: Set a max width for buttons */
+    padding: 10px 20px;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background-color: #909a36;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow */
+}
+
+
 #instructions {
     position: absolute;
     top: 50px; /* Adjust as needed */
@@ -21,7 +45,6 @@ body {
     font-weight: bold;
     line-height: 1.5; /* Add spacing between lines */
 }
-
 
 #megaman {
     position: absolute;
@@ -42,27 +65,15 @@ body {
     }
 }
 
-#game-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: url('qsPzzO6 (1).jpg') no-repeat center center;
-    background-size: cover; /* Ensures the background covers the entire container */
-}
-
-.shooting {
-    background: url('megaman-shooting-transparent-resized.png') no-repeat;
-    animation: none; /* Disable running animation when shooting */
-}
-
-#start-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+#start-button,
+#start-button1 {
+    position: relative; /* Use relative for natural positioning */
+    margin: 10px auto; /* Center horizontally */
+    display: block; /* Stack buttons vertically */
+    width: 80%; /* Adjusts the width for better appearance on mobile */
     padding: 10px 20px;
     font-size: 18px;
+    text-align: center;
     cursor: pointer;
     border: none;
     background-color: #909a36;
@@ -71,16 +82,7 @@ body {
 }
 
 #start-button1 {
-    position: absolute;
-    top: calc(50% + 60px); /* Places it below start-button (adjust 60px as needed) */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px 20px;
-    font-size: 18px;
-    text-align: center;
-    border: none;
-    background-color: #909a36;
-    color: white;
+    margin-top: 10px; /* Add spacing below #start-button */
 }
 
 #score {
@@ -133,31 +135,12 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-    #start-button, #start-button1 {
-        position: relative; /* Reset absolute positioning */
-        margin: 10px auto; /* Center the buttons */
-        display: block; /* Ensure they stack vertically */
-    }
-
-    #start-button1 {
-        margin-top: 10px; /* Add some space between the two buttons */
-    }
-}
-#start-button,
-#start-button1 {
-    position: relative; /* Allows natural flow positioning */
-    margin: 10px auto; /* Centers the buttons horizontally and adds spacing */
-    display: block; /* Makes each button a block element */
-    width: 80%; /* Adjusts the width for better appearance on mobile */
-    text-align: center; /* Ensures text stays centered */
-}
-@media screen and (max-width: 768px) {
     #start-button,
     #start-button1 {
         position: relative; /* Keeps the flow natural */
         margin: 10px auto; /* Centers the buttons */
         display: block;
         width: 80%; /* Adjust width on smaller devices */
-        text-align: center; /* Ensures text alignment */
+        text-align: center;
     }
 }
