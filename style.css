@@ -143,3 +143,21 @@ body {
         margin-top: 10px; /* Add some space between the two buttons */
     }
 }
+#start-button,
+#start-button1 {
+    position: relative; /* Allows natural flow positioning */
+    margin: 10px auto; /* Centers the buttons horizontally and adds spacing */
+    display: block; /* Makes each button a block element */
+    width: 80%; /* Adjusts the width for better appearance on mobile */
+    text-align: center; /* Ensures text stays centered */
+}
+@media screen and (max-width: 768px) {
+    #start-button,
+    #start-button1 {
+        position: relative; /* Keeps the flow natural */
+        margin: 10px auto; /* Centers the buttons */
+        display: block;
+        width: 80%; /* Adjust width on smaller devices */
+        text-align: center; /* Ensures text alignment */
+    }
+}
