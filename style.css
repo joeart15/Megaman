@@ -201,6 +201,13 @@ body {
     background-color: #45a049; /* Slightly darker when pressed */
 }
 
+#ai-toggle {
+    background-color: #888;
+}
+#ai-toggle.active {
+    background-color: #27ae60;
+}
+
 @media screen and (max-width: 768px) {
     #start-button {
         position: relative; /* Keeps the flow natural */

@@ -253,6 +253,7 @@ function gameOver() {
     gameRunning = false;
     clearInterval(scoreInterval);
     clearTimeout(spawnTimeout);
+    stopAutoPlay();
 
     const highScore = parseInt(localStorage.getItem('megaman_highscore') || '0');
     if (score > highScore) localStorage.setItem('megaman_highscore', score);
@@ -285,4 +286,68 @@ if ('ontouchstart' in window) {
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') jump();
     if (e.code === 'KeyF') shoot();
+    if (e.code === 'KeyP') toggleAutoPlay();
 });
+
+// ── AI Auto-Play ──────────────────────────────────────────────
+let autoPlay = false;
+let autoPlayInterval = null;
+
+function startAutoPlay() {
+    if (autoPlayInterval) return;
+    autoPlayInterval = setInterval(() => {
+        if (!gameRunning) return;
+
+        const obstacles = Array.from(document.querySelectorAll('.obstacle'));
+        if (obstacles.length === 0) return;
+
+        const megaRect = megaman.getBoundingClientRect();
+
+        // Find the nearest obstacle in front of Megaman
+        let nearest = null;
+        let nearestDist = Infinity;
+        for (const o of obstacles) {
+            const r = o.getBoundingClientRect();
+            const dist = r.left - megaRect.right;
+            if (dist >= -20 && dist < nearestDist) {
+                nearest = { el: o, rect: r, dist };
+                nearestDist = dist;
+            }
+        }
+        if (!nearest) return;
+
+        const oRect = nearest.rect;
+        const verticalOverlap = !(megaRect.bottom < oRect.top || megaRect.top > oRect.bottom);
+        const horiz = nearest.dist;
+
+        // Close + low enemy → jump
+        if (horiz <= 140 && !isJumping && (oRect.bottom >= (window.innerHeight - 160) || verticalOverlap)) {
+            jump();
+            return;
+        }
+
+        // Shoot at anything within range
+        if (horiz <= 600) {
+            shoot();
+        }
+    }, 100);
+}
+
+function stopAutoPlay() {
+    if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+    }
+}
+
+function toggleAutoPlay() {
+    autoPlay = !autoPlay;
+    const btn = document.getElementById('ai-toggle');
+    if (autoPlay) {
+        startAutoPlay();
+        if (btn) { btn.textContent = '🤖 AI: ON'; btn.style.backgroundColor = '#27ae60'; }
+    } else {
+        stopAutoPlay();
+        if (btn) { btn.textContent = '🤖 AI: OFF'; btn.style.backgroundColor = '#888'; }
+    }
+}
