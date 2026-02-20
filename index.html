@@ -3,9 +3,19 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; script-src 'self';">
     <title>Mega Man Game</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preload" as="image" href="resized_character_1.png">
+    <link rel="preload" as="image" href="resized_character_3.png">
+    <link rel="preload" as="image" href="resized_character_5.png">
+    <link rel="preload" as="image" href="resized_character_7.png">
+    <link rel="preload" as="image" href="resized_character_9.png">
+    <link rel="preload" as="image" href="resized_character_15.png">
+    <link rel="preload" as="image" href="resized_character_17.png">
+    <link rel="preload" as="image" href="resized_character_19.png">
+    <link rel="preload" as="image" href="megaman-sprite-single-row-resized.png">
+    <link rel="preload" as="image" href="megaman-shooting-transparent-resized.png">
 </head>
 <body>
     <div id="game-container">
@@ -15,16 +25,23 @@
         </div>
         
         <div id="megaman"></div>
-        <button id="start-button">Start Game</button> 
-        <button id="start-button1">Created by Josue Arteaga - Dedicated to Little Josiah, Makayla, Angie, and Sebas</button> 
+        <button id="start-button">Start Game</button>
+        <p id="credits">Created by Josue Arteaga - Dedicated to Little Josiah, Makayla, Angie, and Sebas</p>
 
         <div id="score">Score: 0</div>
         <div id="instructions">
             Press F to Shoot Ray Beams<br>
             Press Space to Jump
         </div>
-        
-        
+
+        <div id="ground"></div>
+
+        <div id="game-over-overlay">
+            <h2>Game Over</h2>
+            <p id="game-over-score">Score: 0</p>
+            <p id="game-over-best">Best: 0</p>
+            <button id="play-again-button">Play Again</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

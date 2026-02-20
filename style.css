@@ -19,8 +19,7 @@ body {
     align-items: center; /* Center elements horizontally */
 }
 
-#start-button,
-#start-button1 {
+#start-button {
     margin: 10px 0; /* Add spacing between buttons */
     width: 80%; /* Make buttons responsive */
     max-width: 300px; /* Optional: Set a max width for buttons */
@@ -33,6 +32,14 @@ body {
     color: white;
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow */
+}
+
+#credits {
+    color: white;
+    font-size: 13px;
+    text-align: center;
+    padding: 8px;
+    margin: 0;
 }
 
 
@@ -67,8 +74,7 @@ body {
     }
 }
 
-#start-button,
-#start-button1 {
+#start-button {
     position: relative; /* Use relative for natural positioning */
     margin: 10px auto; /* Center horizontally */
     display: block; /* Stack buttons vertically */
@@ -83,10 +89,6 @@ body {
     border-radius: 5px;
 }
 
-#start-button1 {
-    margin-top: 10px; /* Add spacing below #start-button */
-}
-
 #score {
     position: absolute;
     top: 10px;
@@ -98,10 +100,72 @@ body {
 
 .projectile {
     position: absolute;
-    width: 15px;
-    height: 8px;
-    background-color: red;
+    width: 18px;
+    height: 10px;
+    background-color: #00cfff;
+    box-shadow: 0 0 8px #00cfff;
     border-radius: 25%;
+}
+
+.hit {
+    filter: brightness(3);
+    transition: filter 0.1s;
+}
+
+.health-bar {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 6px;
+    background: #333;
+}
+
+.health-fill {
+    width: 100%;
+    height: 100%;
+    background-color: green;
+}
+
+#ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    background: #5a3e1b;
+}
+
+#game-over-overlay {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game-over-overlay h2 {
+    font-size: 32px;
+    margin: 0 0 10px 0;
+}
+
+#play-again-button {
+    margin-top: 15px;
+    padding: 10px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
 }
 
 .obstacle {
@@ -138,12 +202,17 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-    #start-button,
-    #start-button1 {
+    #start-button {
         position: relative; /* Keeps the flow natural */
         margin: 10px auto; /* Centers the buttons */
         display: block;
         width: 80%; /* Adjust width on smaller devices */
         text-align: center;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #controls {
+        display: none;
     }
 }

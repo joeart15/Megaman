@@ -2,13 +2,16 @@ const megaman = document.getElementById('megaman');
 const gameContainer = document.getElementById('game-container');
 const startButton = document.getElementById('start-button');
 const scoreDisplay = document.getElementById('score');
-const startButton1 = document.getElementById('start-button1'); // Get start-button1
+const credits = document.getElementById('credits');
 const jumpButton = document.getElementById('jump-button');
 const shootButton = document.getElementById('shoot-button');
 
 let isJumping = false;
 let score = 0;
 let scoreInterval;
+let gameRunning = false;
+let isShooting = false;
+let spawnTimeout;
 
 // Array of obstacle characters
 const characters = [
@@ -22,9 +25,6 @@ const characters = [
     'resized_character_19.png'
 ];
 
-jumpButton.addEventListener('touchstart', () => jump());
-shootButton.addEventListener('touchstart', () => shoot());
-
 jumpButton.addEventListener('touchstart', (e) => {
     e.preventDefault(); // Prevents default touch behavior
     jump();
@@ -37,10 +37,11 @@ shootButton.addEventListener('touchstart', (e) => {
 
 
 startButton.addEventListener('click', () => {
-    startButton.style.display = 'none'; // Hide the main start button
-    startButton1.style.display = 'none'; // Hide start-button1
-    megaman.style.display = 'block'; // Show Mega Man
-    megaman.style.animation = 'run 1s steps(10) infinite'; // Start running animation
+    startButton.style.display = 'none';
+    credits.style.display = 'none';
+    megaman.style.display = 'block';
+    megaman.style.animation = 'run 1s steps(10) infinite';
+    document.getElementById('instructions').style.display = 'none';
     startObstacleMovement();
     startScoreCounter();
 });
@@ -75,6 +76,10 @@ function jump() {
 
 // Shooting functionality
 function shoot() {
+    if (isShooting) return;
+    isShooting = true;
+    setTimeout(() => { isShooting = false; }, 300);
+
     // Temporarily set the shooting sprite
     megaman.style.background = "url('megaman-shooting-transparent-resized.png') no-repeat";
     megaman.style.animation = "none"; // Stop the running animation
@@ -91,9 +96,9 @@ function shoot() {
         let projectileLeft = parseInt(projectile.style.left);
         projectile.style.left = `${projectileLeft + 10}px`;
 
-        // Check collision with obstacles
-        const obstacle = document.querySelector('.obstacle');
-        if (obstacle) {
+        // Check collision with ALL obstacles
+        const obstacles = document.querySelectorAll('.obstacle');
+        for (const obstacle of obstacles) {
             let obstacleRect = obstacle.getBoundingClientRect();
             let projectileRect = projectile.getBoundingClientRect();
 
@@ -108,21 +113,35 @@ function shoot() {
                 currentHealth -= 1;
                 obstacle.dataset.health = currentHealth;
 
+                // Update health bar
+                const healthFill = obstacle.querySelector('.health-fill');
+                if (healthFill) {
+                    healthFill.style.width = (currentHealth / 3 * 100) + '%';
+                    if (currentHealth <= 1) healthFill.style.backgroundColor = 'red';
+                    else if (currentHealth <= 2) healthFill.style.backgroundColor = 'orange';
+                }
+
+                // Hit flash
+                obstacle.classList.add('hit');
+                setTimeout(() => obstacle.classList.remove('hit'), 150);
+
                 // Remove projectile
-                gameContainer.removeChild(projectile);
+                if (gameContainer.contains(projectile)) gameContainer.removeChild(projectile);
                 clearInterval(projectileInterval);
 
                 // Check if the obstacle "dies"
                 if (currentHealth <= 0) {
-                    gameContainer.removeChild(obstacle);
-                    resetObstacle(); // Spawn a new obstacle
+                    score += 50;
+                    updateScoreDisplay();
+                    if (gameContainer.contains(obstacle)) gameContainer.removeChild(obstacle);
                 }
+                return;
             }
         }
 
         // Remove projectile if it goes off-screen
         if (projectileLeft > window.innerWidth) {
-            gameContainer.removeChild(projectile);
+            if (gameContainer.contains(projectile)) gameContainer.removeChild(projectile);
             clearInterval(projectileInterval);
         }
     }, 20);
@@ -135,7 +154,10 @@ function shoot() {
 }
 
 function startObstacleMovement() {
+    gameRunning = true;
     const spawnObstacle = () => {
+        if (!gameRunning) return;
+
         const obstacle = document.createElement('div');
         obstacle.classList.add('obstacle');
         obstacle.dataset.health = 3; // Initialize obstacle health to 3
@@ -151,13 +173,31 @@ function startObstacleMovement() {
 
         // Randomize starting position (horizontal position off-screen)
         obstacle.style.bottom = `${Math.floor(Math.random() * 150) + 20}px`; // Randomize vertical position
-        obstacle.style.right = '-100px'; // Start off-screen
+
+        // Add health bar
+        const healthBar = document.createElement('div');
+        healthBar.className = 'health-bar';
+        const healthFill = document.createElement('div');
+        healthFill.className = 'health-fill';
+        healthBar.appendChild(healthFill);
+        obstacle.appendChild(healthBar);
+
         gameContainer.appendChild(obstacle);
+
+        // Track position as JS variable (avoid getComputedStyle in hot loop)
+        let obstacleRight = -100;
+        obstacle.style.right = `${obstacleRight}px`;
 
         // Move the obstacle
         let moveInterval = setInterval(() => {
-            let obstacleRight = parseInt(window.getComputedStyle(obstacle).right);
-            obstacle.style.right = `${obstacleRight + 5}px`;
+            if (!gameRunning) {
+                clearInterval(moveInterval);
+                return;
+            }
+
+            const speed = Math.min(10, 5 + Math.floor(score / 200));
+            obstacleRight += speed;
+            obstacle.style.right = `${obstacleRight}px`;
 
             const megamanRect = megaman.getBoundingClientRect();
             const obstacleRect = obstacle.getBoundingClientRect();
@@ -169,19 +209,19 @@ function startObstacleMovement() {
                 megamanRect.top <= obstacleRect.bottom
             ) {
                 clearInterval(moveInterval);
-                alert(`Game Over! Final Score: ${score}`);
-                window.location.reload();
+                gameOver();
             }
 
             // Remove obstacle if it moves off-screen
             if (obstacleRight >= window.innerWidth) {
                 clearInterval(moveInterval);
-                gameContainer.removeChild(obstacle);
+                if (gameContainer.contains(obstacle)) gameContainer.removeChild(obstacle);
             }
         }, 20);
 
-        // Spawn the next obstacle after a random delay
-        setTimeout(spawnObstacle, Math.floor(Math.random() * 3000) + 1000); // Delay between 1-4 seconds
+        // Spawn the next obstacle after a delay based on score
+        const spawnDelay = Math.floor(Math.random() * 2000) + Math.max(500, 1000 - Math.floor(score / 100) * 50);
+        spawnTimeout = setTimeout(spawnObstacle, spawnDelay);
     };
 
     // Start the first obstacle
@@ -197,11 +237,48 @@ function selectRandomCharacter() {
 // Score counter
 function startScoreCounter() {
     score = 0;
-    scoreDisplay.textContent = `Score: ${score}`;
+    updateScoreDisplay();
     scoreInterval = setInterval(() => {
         score++;
-        scoreDisplay.textContent = `Score: ${score}`;
+        updateScoreDisplay();
     }, 100);
+}
+
+function updateScoreDisplay() {
+    const highScore = parseInt(localStorage.getItem('megaman_highscore') || '0');
+    scoreDisplay.textContent = `Score: ${score}  Best: ${highScore}`;
+}
+
+function gameOver() {
+    gameRunning = false;
+    clearInterval(scoreInterval);
+    clearTimeout(spawnTimeout);
+
+    const highScore = parseInt(localStorage.getItem('megaman_highscore') || '0');
+    if (score > highScore) localStorage.setItem('megaman_highscore', score);
+
+    const newHigh = parseInt(localStorage.getItem('megaman_highscore') || '0');
+    document.getElementById('game-over-score').textContent = `Score: ${score}`;
+    document.getElementById('game-over-best').textContent = `Best: ${newHigh}`;
+    document.getElementById('game-over-overlay').style.display = 'flex';
+}
+
+document.getElementById('play-again-button').addEventListener('click', () => {
+    document.getElementById('game-over-overlay').style.display = 'none';
+    document.querySelectorAll('.obstacle').forEach(el => el.remove());
+    document.querySelectorAll('.projectile').forEach(el => el.remove());
+    megaman.style.display = 'block';
+    megaman.style.animation = 'run 1s steps(10) infinite';
+    startObstacleMovement();
+    startScoreCounter();
+});
+
+// Adaptive instructions
+if ('ontouchstart' in window) {
+    const inst = document.getElementById('instructions');
+    inst.textContent = 'Tap Shoot to fire';
+    inst.appendChild(document.createElement('br'));
+    inst.appendChild(document.createTextNode('Tap Jump to jump'));
 }
 
 // Event listeners for jump and shoot
